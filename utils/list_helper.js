@@ -12,8 +12,24 @@ const favoriteBlog = (blogs) => blogs.length ? blogs
     likes: blog.likes,
   }))[0] : null
 
+const mostBlogs = (blogs) => blogs.length ? blogs
+  .reduce((p,c) => {
+    if (p.some(entry => entry.author === c.author)) {
+      return p.map(entry => entry.author === c.author ? ({
+        author: entry.author,
+        blogs: entry.blogs + 1,
+      }) : entry)
+    } else {
+      return p.concat([{
+        author: c.author,
+        blogs: 1,
+      }])
+    }
+  }, []).sort((a, b) => b.blogs - a.blogs)[0] : null
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
+  mostBlogs,
 }
