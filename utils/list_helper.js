@@ -27,9 +27,25 @@ const mostBlogs = (blogs) => blogs.length ? blogs
     }
   }, []).sort((a, b) => b.blogs - a.blogs)[0] : null
 
+const mostLikes = (blogs) => blogs.length ? blogs
+  .reduce((p, c) => {
+    if (p.some(entry => entry.author === c.author)) {
+      return p.map(entry => entry.author === c.author ? ({
+        author: entry.author,
+        likes: entry.likes + c.likes,
+      }) : entry)
+    } else {
+      return p.concat([{
+        author: c.author,
+        likes: c.likes,
+      }])
+    }
+  }, []).sort((a, b) => b.likes - a.likes)[0] : null
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 }
