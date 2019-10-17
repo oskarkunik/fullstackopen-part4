@@ -55,6 +55,32 @@ test('a valid blog can be added', async () => {
   )
 })
 
+test('if blog is missing "likes", default likes to 0', async () => {
+  const newBlog = {
+    title: 'Entry with missing likes',
+    author: 'Lo Wang',
+    url: 'https://lowang.com/missing-likes',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1)
+
+  expect(blogsAtEnd).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        ...newBlog,
+        likes: 0
+      })
+    ])
+  )
+})
+
 afterAll(async () => {
   mongoose.connection.close()
   await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
