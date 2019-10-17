@@ -81,6 +81,18 @@ test('if blog is missing "likes", default likes to 0', async () => {
   )
 })
 
+test('backend responds with 400 when missing "author" and "title"', async () => {
+  const newBlog = {
+    url: 'https://lowang.com/missing-likes',
+    likes: 0
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
 afterAll(async () => {
   mongoose.connection.close()
   await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error

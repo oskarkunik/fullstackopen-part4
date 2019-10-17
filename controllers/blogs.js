@@ -9,6 +9,13 @@ blogsRouter.get('/', (request, response) => {
 
 blogsRouter.post('/', (request, response) => {
   const body = request.body
+
+  if (!body.title || !body.author) {
+    return response.status(400).json({
+      error: 'content missing'
+    })
+  }
+
   const blog = new Blog({
     title: body.title,
     author: body.author,
