@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/5da7246d4855432bbcb0f366
+Content-Type: application/json
+
+{
+  "title": "Updated Blog Entry",
+  "author": "Lo Wang",
+  "url": "https://lowang.com/valid-entry",
+  "likes": 6
+}

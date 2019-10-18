@@ -110,6 +110,32 @@ test('deleting succeeds with 204 if id is valid', async () => {
   expect(blogsAtEnd).not.toContain(blogToDelete.content)
 })
 
+test('updating succeeds if id is valid', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToUpdate = blogsAtStart[0]
+
+  const newContent = {
+    title: 'Updated Blog Entry',
+    author: 'Lo Wang',
+    url: 'https://lowang.com/valid-entry',
+    likes: 6
+  }
+
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(newContent)
+    .expect(200)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd.length).toBe(helper.initialBlogs.length)
+
+  expect(blogsAtEnd).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining(newContent)
+    ])
+  )
+})
+
 afterAll(async () => {
   mongoose.connection.close()
   await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
